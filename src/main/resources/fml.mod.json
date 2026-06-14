@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "texture_rotation",
+  "version": "${version}",
+  "name": "TextureRotation mod",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://minecraftistooeasy.github.io/",
+    "sources": "https://github.com/MinecraftIsTooEasy/fish-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/texture_rotation/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "vbonedra.texture_rotation.TextureRotationMod"
+    ],
+    "registry": [
+
+    ]
+  },
+  "mixins": [
+    "texture_rotation.mixins.json"
+  ],
+  "depends": {
+    "fishmodloader": ">=3.4.0",
+    "minecraft": "1.6.4-mite",
+    "java": ">=17",
+    "many-lib": ">=2.0.0",
+    "rusted_iron_core": ">=1.3.5"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "accessWidener": "texture_rotation.accesswidener"
+}

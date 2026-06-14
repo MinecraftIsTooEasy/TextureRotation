@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "vbonedra.texture_rotation.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "target": "DEFAULT",
+  "mixins": [
+    "RenderBlocksMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+	}
+}
