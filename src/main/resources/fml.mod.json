@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "texture_rotation",
   "version": "${version}",
-  "name": "TextureRotation mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "TextureRotation",
+  "description": "Texture Rotation! No more boring block patterns for natural blocks!",
   "authors": [
     "Me!"
   ],

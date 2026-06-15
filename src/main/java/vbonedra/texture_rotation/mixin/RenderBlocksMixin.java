@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import vbonedra.texture_rotation.TRConfigs;
 
+import static vbonedra.texture_rotation.TRConfigs.*;
+
 @Mixin(RenderBlocks.class)
 public class RenderBlocksMixin {
 
@@ -24,11 +26,10 @@ public class RenderBlocksMixin {
     @Shadow double[] u;
     @Shadow double[] v;
 
-    @Shadow
-    public IBlockAccess blockAccess;
-    @Unique private boolean needsFlipX = false;
-    @Unique private boolean needsFlipY = false;
     @Shadow private Icon overrideBlockTexture;
+
+    @Unique private boolean FlipX = false;
+    @Unique private boolean FlipY = false;
 
     @Unique private int getBlockHash(int x, int y, int z, int blockID) {
         int hash = x * 7375653 ^ y * 19349663 ^ z * 83492791 ^ blockID * 13271443;
@@ -40,12 +41,16 @@ public class RenderBlocksMixin {
 
     @Inject(method = "renderStandardBlock(Lnet/minecraft/Block;III)Z", at = @At("HEAD"))
     private void beforeRenderStandardBlock(Block par1Block, int par2, int par3, int par4, CallbackInfoReturnable<Boolean> cir) {
-        if (!TRConfigs.RotateTextures.getBooleanValue()) return;
+        if (!TRConfigs.RandomizeTextures.getBooleanValue()) return;
         if (par1Block == null) return;
-        if (!isRotational(par1Block)) return;
+        if (!isRandomized(par1Block)) return;
         if (this.overrideBlockTexture != null && this.overrideBlockTexture.getIconName().contains("destroy")) return;
 
         int hash = getBlockHash(par2, par3, par4, par1Block.blockID);
+        if (par1Block.blockID == Block.oreRedstoneGlowing.blockID) {
+            hash = getBlockHash(par2, par3, par4, Block.oreRedstone.blockID);
+        }
+
         // false because done in special way, using it might break custom rotation
         this.flipTexture = false;
         // 8 variants
@@ -54,10 +59,10 @@ public class RenderBlocksMixin {
         // 1,5 - x
         // 2,6 - y
         // 3,7 - xy
-        this.needsFlipX = (variant == 1 || variant == 3 || variant == 5 || variant == 7);
-        this.needsFlipY = (variant == 2 || variant == 3 || variant == 6 || variant == 7);
+        this.FlipX = TRConfigs.FlipX.getBooleanValue() && (variant == 1 || variant == 3 || variant == 5 || variant == 7);
+        this.FlipY = TRConfigs.FlipY.getBooleanValue() && (variant == 2 || variant == 3 || variant == 6 || variant == 7);
         // used to rotate blocks by 90 degree to add 4 more variants
-        int rotation = (variant >= 4) ? 1 : 0;
+        int rotation = TRConfigs.Rotate90Degree.getBooleanValue() ? (variant >= 4 ? 1 : 0) : 0;
 
         if (isSandy(par1Block)) {
             this.uvRotateTop = rotation;
@@ -82,7 +87,7 @@ public class RenderBlocksMixin {
             this.uvRotateSouth = 0;
             this.uvRotateEast = 0;
             this.uvRotateWest = 0;
-            this.needsFlipY = false;
+            this.FlipY = false;
         }
     }
 
@@ -130,37 +135,41 @@ public class RenderBlocksMixin {
         applyFlipsToSides(par1Block);
     }
 
-    // flippers TODO: maybe merge into one universal? also maybe optimize applyFlipsToSides, it might be slow on phones or slow pcs
-    @Unique private void applyHorizontalAndVerticalFlipY(Block block) {
-        if (!TRConfigs.RotateTextures.getBooleanValue()) return;
-        if (this.needsFlipX) {
+
+    @Unique
+    private void applyHorizontalAndVerticalFlipY(Block block) {
+        if (!TRConfigs.RandomizeTextures.getBooleanValue()) return;
+        if (this.FlipX) {
             double temp0 = this.u[0]; double temp1 = this.u[1];
             this.u[0] = this.u[3]; this.u[1] = this.u[2];
             this.u[3] = temp0;     this.u[2] = temp1;
         }
-        if (this.needsFlipY) {
+        if (this.FlipY) {
             double temp0 = this.v[0]; double temp3 = this.v[3];
             this.v[0] = this.v[1]; this.v[3] = this.v[2];
             this.v[1] = temp0;     this.v[2] = temp3;
         }
     }
-    @Unique private void applyFlipsToSides(Block block) {
-        if (!TRConfigs.RotateTextures.getBooleanValue()) return;
+
+    @Unique
+    private void applyFlipsToSides(Block block) {
+        if (!TRConfigs.RandomizeTextures.getBooleanValue()) return;
         if (isPillary(block)) {
-            if (this.needsFlipY) {
+            if (this.FlipY) {
                 double minV = Math.min(Math.min(this.v[0], this.v[1]), Math.min(this.v[2], this.v[3]));
                 double maxV = Math.max(Math.max(this.v[0], this.v[1]), Math.max(this.v[2], this.v[3]));
                 for (int i = 0; i < 4; i++) this.v[i] = (minV + maxV) - this.v[i];
             }
+            return;
         }
-        if (this.needsFlipX) {
+        if (this.FlipX) {
             double minU = Math.min(Math.min(this.u[0], this.u[1]), Math.min(this.u[2], this.u[3]));
             double maxU = Math.max(Math.max(this.u[0], this.u[1]), Math.max(this.u[2], this.u[3]));
             for (int i = 0; i < 4; i++) {
                 this.u[i] = (minU + maxU) - this.u[i];
             }
         }
-        if (this.needsFlipY) {
+        if (this.FlipY) {
             double minV = Math.min(Math.min(this.v[0], this.v[1]), Math.min(this.v[2], this.v[3]));
             double maxV = Math.max(Math.max(this.v[0], this.v[1]), Math.max(this.v[2], this.v[3]));
             for (int i = 0; i < 4; i++) {
@@ -169,11 +178,11 @@ public class RenderBlocksMixin {
         }
     }
 
-    // resets custom rotations TODO: maybe reset all vanilla rotations too?
+
     @Inject(method = "renderStandardBlock(Lnet/minecraft/Block;III)Z", at = @At("RETURN"))
     private void afterRenderStandardBlock(Block par1Block, int par2, int par3, int par4, CallbackInfoReturnable<Boolean> cir) {
-        this.needsFlipX = false;
-        this.needsFlipY = false;
+        this.FlipX = false;
+        this.FlipY = false;
         this.uvRotateTop = 0;
         this.uvRotateBottom = 0;
         this.uvRotateNorth = 0;
@@ -182,67 +191,22 @@ public class RenderBlocksMixin {
         this.uvRotateWest = 0;
     }
 
-    // render groups TODO: move to util or config?
     @Unique
     private boolean isSandy(Block block) {
-        int id = block.blockID;
-        return id == Block.dirt.blockID
-                || id == Block.sand.blockID
-                || id == Block.gravel.blockID
-                || id == Block.slowSand.blockID
-                || id == Block.blockClay.blockID
-                || id == Block.whiteStone.blockID
-                || id == Block.netherrack.blockID
-                || id == Block.oreNetherQuartz.blockID
-                || id == Block.sponge.blockID
-                || id == Block.hardenedClay.blockID
-                || id == Block.stainedClay.blockID
-                || id == Block.blockSnow.blockID
-                || id == Block.glowStone.blockID
-                || id == Block.mantleOrCore.blockID
-                ;
+        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 1 && RandomizeSandy.getBooleanValue();
     }
     @Unique private boolean isStony(Block block) {
-        int id = block.blockID;
-        return id == Block.stone.blockID
-                || id == Block.bedrock.blockID
-                || id == Block.mantleOrCore.blockID
-
-                || id == Block.oreGold.blockID
-                || id == Block.oreIron.blockID
-                || id == Block.oreCoal.blockID
-                || id == Block.oreLapis.blockID
-                || id == Block.oreDiamond.blockID
-                || id == Block.oreRedstone.blockID
-                || id == Block.oreRedstoneGlowing.blockID
-                || id == Block.oreEmerald.blockID
-                || id == Block.oreCopper.blockID
-                || id == Block.oreSilver.blockID
-                || id == Block.oreMithril.blockID
-                || id == Block.oreAdamantium.blockID
-
-                || id == Block.cloth.blockID
-                || id == Block.melon.blockID
-                || id == Block.leaves.blockID
-                ;
+        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 2 && RandomizeStony.getBooleanValue();
     }
     @Unique private boolean isGrassy(Block block) {
-        int id = block.blockID;
-        return id == Block.grass.blockID
-                || id == Block.mycelium.blockID
-                ;
+        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 3 && RandomizeGrassy.getBooleanValue();
     }
     @Unique private boolean isPillary(Block block) {
-        int id = block.blockID;
-        return id == Block.wood.blockID
-                || id == Block.blockNetherQuartz.blockID
-                || id == Block.hay.blockID
-                || id == Block.sandStone.blockID
-                ;
+        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 4 && RandomizePillary.getBooleanValue();
     }
 
 
-    @Unique private boolean isRotational(Block block) {
+    @Unique private boolean isRandomized(Block block) {
         return isSandy(block)
                 || isGrassy(block)
                 || isStony(block)

@@ -8,6 +8,8 @@ import net.xiaoyu233.fml.ModResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static vbonedra.texture_rotation.TRConfigs.reinitializeBlockMap;
+
 public class TextureRotationMod implements ModInitializer {
     public static final String MOD_ID = "texture_rotation";
     public static final String MOD_NAME = "TextureRotation";
@@ -22,12 +24,24 @@ public class TextureRotationMod implements ModInitializer {
         TRConfigs.getInstance().load();
         ConfigManager.getInstance().registerConfig(TRConfigs.getInstance());
 
-        TRConfigs.RotateTextures.setValueChangeCallback(config -> {
+        reinitializeBlockMap();
+        fi.dy.masa.malilib.config.interfaces.IValueChangeCallback<fi.dy.masa.malilib.config.options.ConfigBoolean> configAndChunkReloader = config -> {
+            reinitializeBlockMap();
             net.minecraft.Minecraft mc = net.minecraft.Minecraft.getMinecraft();
             if (mc != null && mc.theWorld != null && mc.renderGlobal != null) {
                 mc.renderGlobal.loadRenderers();
             }
-        });
+        };
+        TRConfigs.RandomizeTextures.setValueChangeCallback(configAndChunkReloader);
+        TRConfigs.FlipX.setValueChangeCallback(configAndChunkReloader);
+        TRConfigs.FlipY.setValueChangeCallback(configAndChunkReloader);
+        TRConfigs.Rotate90Degree.setValueChangeCallback(configAndChunkReloader);
+
+        TRConfigs.RandomizeSandy.setValueChangeCallback(configAndChunkReloader);
+        TRConfigs.RandomizeGrassy.setValueChangeCallback(configAndChunkReloader);
+        TRConfigs.RandomizeStony.setValueChangeCallback(configAndChunkReloader);
+        TRConfigs.RandomizePillary.setValueChangeCallback(configAndChunkReloader);
+
 
         TextureRotationEvent.register();
     }
