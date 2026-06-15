@@ -22,6 +22,13 @@ public class TextureRotationMod implements ModInitializer {
         TRConfigs.getInstance().load();
         ConfigManager.getInstance().registerConfig(TRConfigs.getInstance());
 
+        TRConfigs.RotateTextures.setValueChangeCallback(config -> {
+            net.minecraft.Minecraft mc = net.minecraft.Minecraft.getMinecraft();
+            if (mc != null && mc.theWorld != null && mc.renderGlobal != null) {
+                mc.renderGlobal.loadRenderers();
+            }
+        });
+
         TextureRotationEvent.register();
     }
 }

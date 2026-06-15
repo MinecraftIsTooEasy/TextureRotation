@@ -1,8 +1,6 @@
 package vbonedra.texture_rotation.mixin;
 
-import net.minecraft.Block;
-import net.minecraft.IBlockAccess;
-import net.minecraft.RenderBlocks;
+import net.minecraft.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -30,6 +28,7 @@ public class RenderBlocksMixin {
     public IBlockAccess blockAccess;
     @Unique private boolean needsFlipX = false;
     @Unique private boolean needsFlipY = false;
+    @Shadow private Icon overrideBlockTexture;
 
     @Unique private int getBlockHash(int x, int y, int z, int blockID) {
         int hash = x * 7375653 ^ y * 19349663 ^ z * 83492791 ^ blockID * 13271443;
@@ -44,6 +43,7 @@ public class RenderBlocksMixin {
         if (!TRConfigs.RotateTextures.getBooleanValue()) return;
         if (par1Block == null) return;
         if (!isRotational(par1Block)) return;
+        if (this.overrideBlockTexture != null && this.overrideBlockTexture.getIconName().contains("destroy")) return;
 
         int hash = getBlockHash(par2, par3, par4, par1Block.blockID);
         // false because done in special way, using it might break custom rotation
@@ -214,7 +214,7 @@ public class RenderBlocksMixin {
                 || id == Block.oreLapis.blockID
                 || id == Block.oreDiamond.blockID
                 || id == Block.oreRedstone.blockID
-                || id == Block.oreRedstoneGlowing.blockID // what??
+                || id == Block.oreRedstoneGlowing.blockID
                 || id == Block.oreEmerald.blockID
                 || id == Block.oreCopper.blockID
                 || id == Block.oreSilver.blockID

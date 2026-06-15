@@ -19,6 +19,7 @@ public class TRConfigs extends SimpleConfigs {
         super(name, hotkeys, values);
     }
 
+
     public List<ConfigTab> getConfigTabs() {
         return tabs;
     }
