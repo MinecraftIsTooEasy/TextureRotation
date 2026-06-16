@@ -4,7 +4,6 @@ import fi.dy.masa.malilib.config.ConfigTab;
 import fi.dy.masa.malilib.config.SimpleConfigs;
 import fi.dy.masa.malilib.config.options.*;
 import net.minecraft.Block;
-import net.minecraft.StringTranslate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ public class TRConfigs extends SimpleConfigs {
     private static final TRConfigs Instance;
     public static final List<ConfigBase<?>> Randomization;
     public static final List<ConfigBase<?>> BlocksListOptions = new ArrayList<>();
-    public static final List<List<ConfigBase<?>>> BlocksListTabs = new ArrayList<>();
     public static final List<ConfigBase<?>> Total = new ArrayList<>();
     public static final List<ConfigTab> tabs = new ArrayList<>();
 
