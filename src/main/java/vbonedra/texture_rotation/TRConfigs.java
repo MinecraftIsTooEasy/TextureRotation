@@ -98,6 +98,23 @@ public class TRConfigs extends SimpleConfigs {
                     || block instanceof net.minecraft.BlockDaylightDetector
                     || block instanceof net.minecraft.BlockAnvil
                     || block instanceof net.minecraft.BlockPlant
+                    || block instanceof net.minecraft.BlockDoor
+                    || block instanceof net.minecraft.BlockFence
+                    || block instanceof net.minecraft.BlockStairs
+                    || block instanceof net.minecraft.BlockFurnace
+                    || block instanceof net.minecraft.BlockWorkbench
+                    || block instanceof net.minecraft.BlockEnchantmentTable
+                    || block instanceof net.minecraft.BlockCarpet
+                    || block instanceof net.minecraft.BlockBasePressurePlate
+                    || block instanceof net.minecraft.BlockBrewingStand
+                    || block instanceof net.minecraft.BlockEndPortal
+                    || block instanceof net.minecraft.BlockEndPortalFrame
+                    || block instanceof net.minecraft.BlockWall
+                    || block instanceof net.minecraft.BlockTripWire
+                    || block instanceof net.minecraft.BlockCake
+                    || block instanceof net.minecraft.BlockFenceGate
+                    || block instanceof net.minecraft.BlockRailBase
+//                    || block instanceof net.minecraft.Block
             ) continue;
             if (id == Block.dirt.blockID
                     || id == Block.sand.blockID
@@ -114,6 +131,9 @@ public class TRConfigs extends SimpleConfigs {
                     || id == Block.whiteStone.blockID
                     || id == Block.cobblestone.blockID
                     || id == Block.cobblestoneMossy.blockID
+                    || id == Block.obsidian.blockID
+                    || id == Block.mushroomCapBrown.blockID
+                    || id == Block.mushroomCapRed.blockID
             ) registerBlockConfig(block, 1);
             else if (id == Block.stone.blockID
                     || id == Block.bedrock.blockID
@@ -132,6 +152,7 @@ public class TRConfigs extends SimpleConfigs {
                     || id == Block.oreAdamantium.blockID
                     || id == Block.cloth.blockID
                     || id == Block.leaves.blockID
+                    || id == Block.tilledField.blockID
             ) registerBlockConfig(block, 2);
             else if (id == Block.grass.blockID
                     || id == Block.mycelium.blockID
@@ -150,7 +171,7 @@ public class TRConfigs extends SimpleConfigs {
         Total.addAll(BlocksListOptions);
 
         tabs.add(new ConfigTab("General", Randomization));
-        tabs.add(new ConfigTab("Blocks Customization", BlocksListOptions));
+        tabs.add(new ConfigTab("Blocks Customization ("+BlocksListOptions.toArray().length+" entries)", BlocksListOptions));
 
         Instance = new TRConfigs("Texture Rotation", null, Total);
     }
