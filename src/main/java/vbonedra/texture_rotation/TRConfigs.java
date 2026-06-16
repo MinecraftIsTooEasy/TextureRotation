@@ -46,8 +46,8 @@ public class TRConfigs extends SimpleConfigs {
 
     private static void registerBlockConfig(Block block, int defaultType) {
         if (block == null) return;
-        String finalConfigName = block.getUnlocalizedName() + " (ID: " + block.blockID + ")";
-        ConfigInteger blockConfig = new ConfigInteger(finalConfigName, defaultType, 0, 4, true, "0 = Off, 1 = Sandy, 2 = Stony, 3 = Grassy, 4 = Pillary");
+        String name = block.getUnlocalizedName().replace("tile.","") + " (ID: " + block.blockID + ")";
+        ConfigInteger blockConfig = new ConfigInteger(name, defaultType, 0, 4, true, "0 = Off, 1 = Sandy, 2 = Stony, 3 = Grassy, 4 = Pillary");
         BlocksListOptions.add(blockConfig);
         configToBlockIdMap.put(blockConfig, block.blockID);
     }
@@ -71,10 +71,10 @@ public class TRConfigs extends SimpleConfigs {
                 RandomizeStony,
                 RandomizePillary
         );
-        for (Block block : Block.blocksList) {
+        for (Block block : Block.blocksList) { // TODO: auto iTF support + fix translations
             if (block == null) continue;
             int id = block.blockID;
-            if (block instanceof net.minecraft.BlockFluid // maybe there are some ways to optimize
+            if (block instanceof net.minecraft.BlockFluid
                     || block instanceof net.minecraft.BlockMounted
                     || block instanceof net.minecraft.BlockDispenser
                     || block instanceof net.minecraft.BlockBed
