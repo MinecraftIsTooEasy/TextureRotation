@@ -72,48 +72,6 @@ public class TRConfigs extends SimpleConfigs {
         for (Block block : Block.blocksList) { // TODO: auto iTF support + fix translations
             if (block == null) continue;
             int id = block.blockID;
-            if (block instanceof net.minecraft.BlockFluid
-                    || block instanceof net.minecraft.BlockMounted
-                    || block instanceof net.minecraft.BlockDispenser
-                    || block instanceof net.minecraft.BlockBed
-                    || block instanceof net.minecraft.BlockPistonBase
-                    || block instanceof net.minecraft.BlockPistonExtension
-                    || block instanceof net.minecraft.BlockPistonMoving
-                    || block instanceof net.minecraft.BlockSlab
-                    || block instanceof net.minecraft.BlockDoubleSlab
-                    || block instanceof net.minecraft.BlockTNT
-                    || block instanceof net.minecraft.BlockFire
-                    || block instanceof net.minecraft.BlockChest
-                    || block instanceof net.minecraft.BlockRedstoneWire
-                    || block instanceof net.minecraft.BlockJukeBox
-                    || block instanceof net.minecraft.BlockPortal
-                    || block instanceof net.minecraft.BlockRedstoneRepeater
-                    || block instanceof net.minecraft.BlockHopper
-                    || block instanceof net.minecraft.BlockVine
-                    || block instanceof net.minecraft.BlockCauldron
-                    || block instanceof net.minecraft.BlockBeacon
-                    || block instanceof net.minecraft.BlockComparator
-                    || block instanceof net.minecraft.BlockDaylightDetector
-                    || block instanceof net.minecraft.BlockAnvil
-                    || block instanceof net.minecraft.BlockPlant
-                    || block instanceof net.minecraft.BlockDoor
-                    || block instanceof net.minecraft.BlockFence
-                    || block instanceof net.minecraft.BlockStairs
-                    || block instanceof net.minecraft.BlockFurnace
-                    || block instanceof net.minecraft.BlockWorkbench
-                    || block instanceof net.minecraft.BlockEnchantmentTable
-                    || block instanceof net.minecraft.BlockCarpet
-                    || block instanceof net.minecraft.BlockBasePressurePlate
-                    || block instanceof net.minecraft.BlockBrewingStand
-                    || block instanceof net.minecraft.BlockEndPortal
-                    || block instanceof net.minecraft.BlockEndPortalFrame
-                    || block instanceof net.minecraft.BlockWall
-                    || block instanceof net.minecraft.BlockTripWire
-                    || block instanceof net.minecraft.BlockCake
-                    || block instanceof net.minecraft.BlockFenceGate
-                    || block instanceof net.minecraft.BlockRailBase
-//                    || block instanceof net.minecraft.Block
-            ) continue;
             if (id == Block.dirt.blockID
                     || id == Block.sand.blockID
                     || id == Block.gravel.blockID
@@ -126,16 +84,14 @@ public class TRConfigs extends SimpleConfigs {
                     || id == Block.oreNetherQuartz.blockID
                     || id == Block.sponge.blockID
                     || id == Block.glowStone.blockID
-                    || id == Block.whiteStone.blockID
-                    || id == Block.cobblestone.blockID
-                    || id == Block.cobblestoneMossy.blockID
                     || id == Block.obsidian.blockID
-                    || id == Block.mushroomCapBrown.blockID
-                    || id == Block.mushroomCapRed.blockID
             ) registerBlockConfig(block, 1);
             else if (id == Block.stone.blockID
                     || id == Block.bedrock.blockID
                     || id == Block.mantleOrCore.blockID
+//                    || id == Block.whiteStone.blockID
+//                    || id == Block.cobblestone.blockID
+//                    || id == Block.cobblestoneMossy.blockID
                     || id == Block.oreGold.blockID
                     || id == Block.oreIron.blockID
                     || id == Block.oreCoal.blockID
@@ -151,6 +107,8 @@ public class TRConfigs extends SimpleConfigs {
                     || id == Block.cloth.blockID
                     || id == Block.leaves.blockID
                     || id == Block.tilledField.blockID
+                    || id == Block.mushroomCapBrown.blockID
+                    || id == Block.mushroomCapRed.blockID
             ) registerBlockConfig(block, 2);
             else if (id == Block.grass.blockID
                     || id == Block.mycelium.blockID
@@ -162,7 +120,52 @@ public class TRConfigs extends SimpleConfigs {
                     || id == Block.blockNetherQuartz.blockID
                     || id == Block.hay.blockID
             ) registerBlockConfig(block, 4);
-            else registerBlockConfig(block, 0);
+            else {
+                if (block instanceof net.minecraft.BlockFluid
+                        || block instanceof net.minecraft.BlockMounted
+                        || block instanceof net.minecraft.BlockDispenser
+                        || block instanceof net.minecraft.BlockBed
+                        || block instanceof net.minecraft.BlockPistonBase
+                        || block instanceof net.minecraft.BlockPistonExtension
+                        || block instanceof net.minecraft.BlockPistonMoving
+                        || block instanceof net.minecraft.BlockSlab
+                        || block instanceof net.minecraft.BlockDoubleSlab
+                        || block instanceof net.minecraft.BlockTNT
+                        || block instanceof net.minecraft.BlockFire
+                        || block instanceof net.minecraft.BlockChest
+                        || block instanceof net.minecraft.BlockRedstoneWire
+                        || block instanceof net.minecraft.BlockJukeBox
+                        || block instanceof net.minecraft.BlockPortal
+                        || block instanceof net.minecraft.BlockRedstoneRepeater
+                        || block instanceof net.minecraft.BlockHopper
+                        || block instanceof net.minecraft.BlockVine
+                        || block instanceof net.minecraft.BlockCauldron
+                        || block instanceof net.minecraft.BlockBeacon
+                        || block instanceof net.minecraft.BlockComparator
+                        || block instanceof net.minecraft.BlockDaylightDetector
+                        || block instanceof net.minecraft.BlockAnvil
+                        || block instanceof net.minecraft.BlockPlant
+                        || block instanceof net.minecraft.BlockDoor
+                        || block instanceof net.minecraft.BlockFence
+                        || block instanceof net.minecraft.BlockStairs
+                        || block instanceof net.minecraft.BlockFurnace
+                        || block instanceof net.minecraft.BlockWorkbench
+                        || block instanceof net.minecraft.BlockEnchantmentTable
+                        || block instanceof net.minecraft.BlockCarpet
+                        || block instanceof net.minecraft.BlockBasePressurePlate
+                        || block instanceof net.minecraft.BlockBrewingStand
+                        || block instanceof net.minecraft.BlockEndPortal
+                        || block instanceof net.minecraft.BlockEndPortalFrame
+                        || block instanceof net.minecraft.BlockWall
+                        || block instanceof net.minecraft.BlockTripWire
+                        || block instanceof net.minecraft.BlockCake
+                        || block instanceof net.minecraft.BlockFenceGate
+                        || block instanceof net.minecraft.BlockRailBase
+                        || block instanceof net.minecraft.BlockPane
+//                    || block instanceof net.minecraft.Block
+                ) continue;
+                registerBlockConfig(block, 0);
+            }
         }
 
         Total.addAll(Randomization);

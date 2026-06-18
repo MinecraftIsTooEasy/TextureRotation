@@ -5,7 +5,7 @@
   "name": "TextureRotation",
   "description": "Texture Rotation! No more boring block patterns for natural blocks!",
   "authors": [
-    "Me!"
+    "vbonedra"
   ],
   "contact": {
     "homepage": "https://minecraftistooeasy.github.io/",
@@ -33,7 +33,9 @@
     "rusted_iron_core": ">=1.3.5"
   },
   "suggests": {
-    "another-mod": "*"
   },
-  "accessWidener": "texture_rotation.accesswidener"
+  "accessWidener": "texture_rotation.accesswidener",
+  "custom": {
+    "modmenu:clientsideOnly": true
+  }
 }
