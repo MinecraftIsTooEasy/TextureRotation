@@ -43,6 +43,7 @@ public class TextureRotationMod implements ModInitializer {
         TRConfigs.FlipX.setValueChangeCallback(configAndChunkReloader);
         TRConfigs.FlipY.setValueChangeCallback(configAndChunkReloader);
         TRConfigs.Rotate90Degree.setValueChangeCallback(configAndChunkReloader);
+        TRConfigs.UseBlockIdToRandomize.setValueChangeCallback(configAndChunkReloader);
 
         TRConfigs.RandomizeSandy.setValueChangeCallback(configAndChunkReloader);
         TRConfigs.RandomizeGrassy.setValueChangeCallback(configAndChunkReloader);
