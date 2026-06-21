@@ -32,7 +32,10 @@ public class RenderBlocksMixin {
     @Unique private boolean FlipY = false;
 
     @Unique private int getBlockHash(int x, int y, int z, int blockID) {
-        int hash = x * 7375653 ^ y * 19349663 ^ z * 83492791 ^ blockID * 13271443;
+        int hash = x * 7375653 ^ y * 19349663 ^ z * 83492791;
+        if (TRConfigs.UseBlockIdToRandomize.getBooleanValue()) {
+            hash ^= blockID * 13271443;
+        }
         hash = (hash ^ (hash >>> 16)) * 0x45d9f3b;
         hash = (hash ^ (hash >>> 16)) * 0x45d9f3b;
         hash = hash ^ (hash >>> 16);
@@ -137,8 +140,9 @@ public class RenderBlocksMixin {
 
 
     @Unique
-    private void applyHorizontalAndVerticalFlipY(Block block) {
+    private void applyHorizontalAndVerticalFlipY(Block par1Block) {
         if (!TRConfigs.RandomizeTextures.getBooleanValue()) return;
+        if (!isRandomized(par1Block)) return;
         if (this.FlipX) {
             double temp0 = this.u[0]; double temp1 = this.u[1];
             this.u[0] = this.u[3]; this.u[1] = this.u[2];
@@ -152,9 +156,10 @@ public class RenderBlocksMixin {
     }
 
     @Unique
-    private void applyFlipsToSides(Block block) {
+    private void applyFlipsToSides(Block par1Block) {
         if (!TRConfigs.RandomizeTextures.getBooleanValue()) return;
-        if (isPillary(block)) {
+        if (!isRandomized(par1Block)) return;
+        if (isPillary(par1Block)) {
             if (this.FlipY) {
                 double minV = Math.min(Math.min(this.v[0], this.v[1]), Math.min(this.v[2], this.v[3]));
                 double maxV = Math.max(Math.max(this.v[0], this.v[1]), Math.max(this.v[2], this.v[3]));
@@ -181,6 +186,8 @@ public class RenderBlocksMixin {
 
     @Inject(method = "renderStandardBlock(Lnet/minecraft/Block;III)Z", at = @At("RETURN"))
     private void afterRenderStandardBlock(Block par1Block, int par2, int par3, int par4, CallbackInfoReturnable<Boolean> cir) {
+        if (!TRConfigs.RandomizeTextures.getBooleanValue()) return;
+        if (!isRandomized(par1Block)) return;
         this.FlipX = false;
         this.FlipY = false;
         this.uvRotateTop = 0;
@@ -192,25 +199,25 @@ public class RenderBlocksMixin {
     }
 
     @Unique
-    private boolean isSandy(Block block) {
-        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 1 && RandomizeSandy.getBooleanValue();
+    private boolean isSandy(Block par1Block) {
+        return BLOCK_RANDOMIZATION_TYPE[par1Block.blockID] == 1 && RandomizeSandy.getBooleanValue();
     }
-    @Unique private boolean isStony(Block block) {
-        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 2 && RandomizeStony.getBooleanValue();
+    @Unique private boolean isStony(Block par1Block) {
+        return BLOCK_RANDOMIZATION_TYPE[par1Block.blockID] == 2 && RandomizeStony.getBooleanValue();
     }
-    @Unique private boolean isGrassy(Block block) {
-        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 3 && RandomizeGrassy.getBooleanValue();
+    @Unique private boolean isGrassy(Block par1Block) {
+        return BLOCK_RANDOMIZATION_TYPE[par1Block.blockID] == 3 && RandomizeGrassy.getBooleanValue();
     }
-    @Unique private boolean isPillary(Block block) {
-        return BLOCK_RANDOMIZATION_TYPE[block.blockID] == 4 && RandomizePillary.getBooleanValue();
+    @Unique private boolean isPillary(Block par1Block) {
+        return BLOCK_RANDOMIZATION_TYPE[par1Block.blockID] == 4 && RandomizePillary.getBooleanValue();
     }
 
 
-    @Unique private boolean isRandomized(Block block) {
-        return isSandy(block)
-                || isGrassy(block)
-                || isStony(block)
-                || isPillary(block)
+    @Unique private boolean isRandomized(Block par1Block) {
+        return isSandy(par1Block)
+                || isGrassy(par1Block)
+                || isStony(par1Block)
+                || isPillary(par1Block)
                 ;
     }
 }

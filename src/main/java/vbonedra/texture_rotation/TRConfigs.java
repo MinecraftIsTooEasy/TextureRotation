@@ -11,10 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 public class TRConfigs extends SimpleConfigs {
-    public static final ConfigBoolean RandomizeTextures = new ConfigBoolean("Randomize Textures",   true, "Turns on/off mod");
-    public static final ConfigBoolean FlipX             = new ConfigBoolean("Flip Horizontal",      true, "Flips textures horizontally (left-right)");
-    public static final ConfigBoolean FlipY             = new ConfigBoolean("Flip Vertical",        true, "Flips textures vertically (top-bottom)");
-    public static final ConfigBoolean Rotate90Degree    = new ConfigBoolean("Rotate 90 Degree",     true, "Rotates textures 90 degree");
+    public static final ConfigBoolean RandomizeTextures     = new ConfigBoolean("Randomize Textures",       true, "Turns on/off mod");
+    public static final ConfigBoolean FlipX                 = new ConfigBoolean("Flip Horizontal",          true, "Flips textures horizontally (left-right)");
+    public static final ConfigBoolean FlipY                 = new ConfigBoolean("Flip Vertical",            true, "Flips textures vertically (top-bottom)");
+    public static final ConfigBoolean Rotate90Degree        = new ConfigBoolean("Rotate 90 Degree",         true, "Rotates textures 90 degree");
+    public static final ConfigBoolean UseBlockIdToRandomize = new ConfigBoolean("Use Block Id To Randomize",true, "Turns on/off BlockID usage for randomization");
 
     public static final ConfigBoolean RandomizeSandy    = new ConfigBoolean("Randomize Sand-like Blocks",   true, "Master switch for Sandy category");
     public static final ConfigBoolean RandomizeGrassy   = new ConfigBoolean("Randomize Grass-like Blocks",  true, "Master switch for Grassy category");
@@ -64,6 +65,8 @@ public class TRConfigs extends SimpleConfigs {
                 FlipX,
                 FlipY,
                 Rotate90Degree,
+                UseBlockIdToRandomize,
+
                 RandomizeSandy,
                 RandomizeGrassy,
                 RandomizeStony,
